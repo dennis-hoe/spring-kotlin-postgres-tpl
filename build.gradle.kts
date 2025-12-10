@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     
     // Database
-    implementation("org.postgresql:postgresql")
+    runtimeOnly("org.postgresql:postgresql:42.7.7")
     implementation("org.flywaydb:flyway-core")
     
     // Test
