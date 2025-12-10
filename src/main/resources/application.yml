@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: spring-kotlin-postgres-tpl
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:demo}
     username: ${DB_USER:postgres}
@@ -8,28 +6,13 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
-    show-sql: false
+      ddl-auto: validate # use validate in combination with Flyway-managed schema in non-development environments
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+    show-sql: true
   flyway:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-  endpoint:
-    health:
-      show-details: always
-
-logging:
-  level:
-    root: INFO
-    com.example.demo: DEBUG
-
+    validate-on-migrate: true
