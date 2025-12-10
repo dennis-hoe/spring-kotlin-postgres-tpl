@@ -91,4 +91,15 @@ class UserServiceTest {
             userService.deleteUser(1L)
         }
     }
+
+    @Test
+    fun `should throw exception when updating user email to existing email`() {
+        val existingUser = User(id = 1, email = "test@example.com", name = "Test User")
+        whenever(userRepository.findById(1L)).thenReturn(Optional.of(existingUser))
+        whenever(userRepository.existsByEmail("existing@example.com")).thenReturn(true)
+
+        assertThrows<IllegalArgumentException> {
+            userService.updateUser(1L, "existing@example.com", null)
+        }
+    }
 }

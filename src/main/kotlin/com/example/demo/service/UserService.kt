@@ -28,7 +28,12 @@ class UserService(
     
     fun updateUser(id: Long, email: String?, name: String?): User {
         val user = userRepository.findById(id).orElseThrow {
-            throw IllegalArgumentException("User with id $id not found")
+            IllegalArgumentException("User with id $id not found")
+        }
+        
+        // Check if email is being changed and if the new email already exists
+        if (email != null && email != user.email && userRepository.existsByEmail(email)) {
+            throw IllegalArgumentException("User with email $email already exists")
         }
         
         val updatedUser = user.copy(
