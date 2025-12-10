@@ -2,9 +2,9 @@ spring:
   application:
     name: spring-kotlin-postgres-tpl
   datasource:
-    url: jdbc:postgresql://localhost:5432/demo
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:demo}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -32,3 +32,4 @@ logging:
   level:
     root: INFO
     com.example.demo: DEBUG
+
