@@ -1,13 +1,25 @@
 # Gradle
-.gradle/
+.gradle
 build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# IntelliJ
-*.iml
+# IDE
 .idea/
-
-# Kotlin
+*.iws
+*.iml
+*.ipr
 out/
+.vscode/
 
 # OS
 .DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Spring Boot
+application-local.yml
+application-local.properties
