@@ -8,7 +8,11 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.mockito.junit.jupiter.MockitoExtension
 import java.util.*
 
@@ -27,7 +31,7 @@ class UserServiceTest {
             User(id = 1, email = "test1@example.com", name = "Test User 1"),
             User(id = 2, email = "test2@example.com", name = "Test User 2")
         )
-        `when`(userRepository.findAll()).thenReturn(users)
+        whenever(userRepository.findAll()).thenReturn(users)
 
         val result = userService.getAllUsers()
 
@@ -38,7 +42,7 @@ class UserServiceTest {
     @Test
     fun `should get user by id`() {
         val user = User(id = 1, email = "test@example.com", name = "Test User")
-        `when`(userRepository.findById(1L)).thenReturn(Optional.of(user))
+        whenever(userRepository.findById(1L)).thenReturn(Optional.of(user))
 
         val result = userService.getUserById(1L)
 
@@ -50,19 +54,19 @@ class UserServiceTest {
     @Test
     fun `should create user successfully`() {
         val user = User(email = "test@example.com", name = "Test User")
-        `when`(userRepository.existsByEmail("test@example.com")).thenReturn(false)
-        `when`(userRepository.save(any(User::class.java))).thenReturn(user.copy(id = 1))
+        whenever(userRepository.existsByEmail("test@example.com")).thenReturn(false)
+        whenever(userRepository.save(any<User>())).thenReturn(user.copy(id = 1))
 
         val result = userService.createUser("test@example.com", "Test User")
 
         assertNotNull(result)
         assertEquals("test@example.com", result.email)
-        verify(userRepository, times(1)).save(any(User::class.java))
+        verify(userRepository, times(1)).save(any<User>())
     }
 
     @Test
     fun `should throw exception when creating user with existing email`() {
-        `when`(userRepository.existsByEmail("test@example.com")).thenReturn(true)
+        whenever(userRepository.existsByEmail("test@example.com")).thenReturn(true)
 
         assertThrows<IllegalArgumentException> {
             userService.createUser("test@example.com", "Test User")
@@ -71,8 +75,8 @@ class UserServiceTest {
 
     @Test
     fun `should delete user successfully`() {
-        `when`(userRepository.existsById(1L)).thenReturn(true)
-        doNothing().`when`(userRepository).deleteById(1L)
+        whenever(userRepository.existsById(1L)).thenReturn(true)
+        doNothing().whenever(userRepository).deleteById(1L)
 
         userService.deleteUser(1L)
 
@@ -81,7 +85,7 @@ class UserServiceTest {
 
     @Test
     fun `should throw exception when deleting non-existent user`() {
-        `when`(userRepository.existsById(1L)).thenReturn(false)
+        whenever(userRepository.existsById(1L)).thenReturn(false)
 
         assertThrows<IllegalArgumentException> {
             userService.deleteUser(1L)
